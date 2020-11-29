@@ -1,0 +1,31 @@
+{
+  "name": "se3316-lab5-tngo24",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon app"
+  },
+  "dependencies": {
+    "bcryptjs": "*",
+    "body-parser": "*",
+    "cors": "*",
+    "express": "*",
+    "jsonwebtoken": "*",
+    "mongoose": "*",
+    "nodemon": "^2.0.6",
+    "passport": "*",
+    "passport-jwt": "*"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dannyngo2000/se3316-lab5-tngo24.git"
+  },
+  "author": "Tien Thien Ngo",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/dannyngo2000/se3316-lab5-tngo24/issues"
+  },
+  "homepage": "https://github.com/dannyngo2000/se3316-lab5-tngo24#readme"
+}
