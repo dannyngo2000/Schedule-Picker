@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 
-//bcript for encryption
+//bcrypt for encryption
 
 const bcrypt = require("bcryptjs");
 
