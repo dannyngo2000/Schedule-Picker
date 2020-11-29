@@ -34,12 +34,12 @@ app.use(cors());
 //Body parser
 app.use(bodyParser.json());
 
-app.use("/users", users);
-
 //Passport Middleware
 app.use(passport.initialize());
 app.use(passport.session());
 
+require("./config/passport")(passport);
+app.use("/users", users);
 //Set static folder
 
 app.use(express.static(path.join(__dirname, "public")));
