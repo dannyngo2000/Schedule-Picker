@@ -4,6 +4,7 @@ const passport = require("passport");
 const jwt = require("jsonwebtoken");
 const User = require("../models/user");
 const config = require("../config/database");
+const bcrypt = require("bcryptjs");
 //Register Route
 
 router.post("/register", (req, res, next) => {
@@ -64,7 +65,31 @@ router.get(
   "/profile",
   passport.authenticate("jwt", { session: false }),
   (req, res, next) => {
-    res.json({ user: req.user });
+    res.send(req.user);
+  }
+);
+
+router.post(
+  "/updatePassword",
+  passport.authenticate("jwt", { session: false }),
+  (req, res, send) => {
+    let username = req.body.username;
+    let newPassword = req.body.newPassword;
+    bcrypt.genSalt(10, function (err, salt) {
+      bcrypt.hash(newPassword, salt, function (err, hash) {
+        // Store hash in database here
+        newPassword = hash;
+        console.log(newPassword);
+        User.findOneAndUpdate(
+          { username: username },
+          { password: newPassword },
+          function (err, result) {
+            if (err) res.send(err);
+            else res.send(result);
+          }
+        );
+      });
+    });
   }
 );
 

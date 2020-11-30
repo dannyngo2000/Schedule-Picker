@@ -1,1 +1,35 @@
-<p>profile works!</p>
+<div *ngIf = "user">
+    <h2 class ="page-header"> {{user.name}}</h2> <button>Deactivate</button>
+    <br> <br>
+    <ul class ="list-group">
+        <li class ="list-group-item">Username: {{user.name}}</li>
+        <li class ="list-group-item"> Email: {{user.email}}</li>
+        
+    </ul>
+    <br>
+    
+    <br>
+    <section class="mb-5 text-center">
+
+       
+      
+        <form (submit) ="onSubmit()">
+      
+          <div class="md-form md-outline">
+            <input type="password" [(ngModel)] = "newPassword" name ="newPassword" id="newPass" class="form-control" placeholder="New Password">
+            
+          </div>
+      
+          <div class="md-form md-outline">
+            <input type="password" [(ngModel)]="confirmedPassword" name="confirmedPassword" class="form-control" placeholder = "Confirm Password">
+          
+          </div>
+      
+          <button type="submit" class="btn btn-primary mb-4">Change password</button>
+      
+        </form>
+      
+      
+      </section>
+</div>
+

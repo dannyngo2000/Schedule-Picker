@@ -14,6 +14,7 @@ const db = mongoose
   .connect(config.database, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
+    useFindAndModify: false,
   })
   .then(() => {
     console.log("Connected To MongoDB DataBase");

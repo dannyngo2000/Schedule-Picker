@@ -16,6 +16,8 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { ValidateService } from '../app/services/validate.service';
 import { AuthService } from '../app/services/auth.service';
+import { JwtModule, JwtHelperService } from '@auth0/angular-jwt';
+import { AuthGuard } from './guard/auth.guard';
 const appRoutes: Routes = [
   {
     path: '',
@@ -33,12 +35,17 @@ const appRoutes: Routes = [
   {
     path: 'dashboard',
     component: DashboardComponent,
+    canActivate: [AuthGuard],
   },
   {
     path: 'profile',
     component: ProfileComponent,
+    canActivate: [AuthGuard],
   },
 ];
+export function tokenGetter() {
+  return localStorage.getItem('id_token');
+}
 @NgModule({
   declarations: [
     AppComponent,
@@ -57,8 +64,15 @@ const appRoutes: Routes = [
     ReactiveFormsModule,
     CommonModule,
     HttpClientModule,
+    JwtModule.forRoot({
+      config: {
+        tokenGetter: tokenGetter,
+        allowedDomains: ['example.com'],
+        disallowedRoutes: ['http://locahost:4200/dashboard/'],
+      },
+    }),
   ],
-  providers: [ValidateService, AuthService],
+  providers: [ValidateService, AuthService, AuthGuard],
   bootstrap: [AppComponent],
 })
 export class AppModule {}
