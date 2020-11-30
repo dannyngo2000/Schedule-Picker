@@ -1,0 +1,40 @@
+<!-- Default form register -->
+
+<form class="text-center border border-light p-5" (submit) ="onRegisterSubmit()">
+
+    <p class="h4 mb-4">Sign up</p>
+
+    <div class="form-row mb-4">
+            <!-- Name -->
+            <input type="text" [(ngModel)]="name" name ="name" id="defaultRegisterFormLastName" class="form-control" placeholder="Full Name">
+       
+    </div>
+
+    <!-- E-mail -->
+    
+    <input type="email"  [(ngModel)]="email"  name ="email" id="defaultRegisterFormEmail" class="form-control mb-4" placeholder="E-mail">
+    <!-- Username -->
+    
+    <input type="text" id="defaultRegisterFormUsername" [(ngModel)]="username" name ="username" class="form-control mb-4" placeholder="Username">
+
+    <!-- Password -->
+    <input type="password" [(ngModel)]="password" name ="password"id="defaultRegisterFormPassword" class="form-control" placeholder="Password" aria-describedby="defaultRegisterFormPasswordHelpBlock">
+    
+  
+   
+    <!-- Sign up button -->
+    <button class="btn btn-info my-4 btn-block" type="submit">Sign in</button>
+
+    <!-- Social register -->
+    <p>or sign up with:</p>
+
+    <a href="#" class="mx-2" role="button"><i class="fab fa-facebook-f light-blue-text"></i></a>
+    <a href="#" class="mx-2" role="button"><i class="fab fa-twitter light-blue-text"></i></a>
+    <a href="#" class="mx-2" role="button"><i class="fab fa-linkedin-in light-blue-text"></i></a>
+    <a href="#" class="mx-2" role="button"><i class="fab fa-github light-blue-text"></i></a>
+
+    <hr>
+
+   
+</form>
+<!-- Default form register -->
