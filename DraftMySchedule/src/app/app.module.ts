@@ -26,6 +26,7 @@ import { SubjectComponentComponent } from './components/subject-component/subjec
 import { ScheduleComponent } from './components/schedule/schedule.component';
 import { CurrentScheduleComponent } from './components/current-schedule/current-schedule.component';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { GuestDisplayComponent } from './components/guest-display/guest-display.component';
 
 const appRoutes: Routes = [
   {
@@ -75,6 +76,8 @@ export function tokenGetter() {
     ScheduleComponent,
 
     CurrentScheduleComponent,
+
+    GuestDisplayComponent,
   ],
   imports: [
     BrowserModule,

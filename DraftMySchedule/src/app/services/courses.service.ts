@@ -39,7 +39,7 @@ export class CoursesService {
 
   constructor(private http: HttpClient) {}
 
-  url: string = 'http://localhost:4000/api/';
+  url: string = 'http://localhost:3000/api/open/';
 
   updateScheduleList(): void {
     this.scheduleListUpdate.next('');
