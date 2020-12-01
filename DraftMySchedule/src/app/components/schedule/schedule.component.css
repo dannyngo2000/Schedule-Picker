@@ -1,0 +1,9 @@
+.schedule {
+  display: flex;
+  width: 40%;
+  padding: 20px;
+  justify-content: space-evenly;
+}
+.input {
+  width: 200px;
+}

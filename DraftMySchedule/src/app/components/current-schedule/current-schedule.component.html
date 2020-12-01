@@ -1,0 +1,13 @@
+<div class ="current-schedule">
+    <h3>Current Schedule: </h3>
+    <select (change)="selectChangeHandlerSchedule($event)" >
+        <option> </option>
+        <option *ngFor="let schedule of scheduleListUpdate$|async " [value] = "schedule"> {{schedule}}  </option>
+    </select>
+    <button (click) ="selectSchedule()">Select</button>
+    <button (click) = "updateSchedule()" [disabled]="scheduleName==='' ">Update</button>
+    <button (click) ="deleteCurrentSchedule()"[disabled]="scheduleName==='' ">Delete</button>
+    <button (click) ="deleteAllSchedule()"[disabled]="scheduleName==='' ">Delete ALL</button>
+    <button (click) = "display()"[disabled]="scheduleName==='' ">Display</button>
+</div>
+<app-course-detail-cards > </app-course-detail-cards>

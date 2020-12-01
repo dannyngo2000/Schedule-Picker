@@ -14,9 +14,11 @@
     "express": "*",
     "jsonwebtoken": "*",
     "mongoose": "*",
+    "node-persist": "^3.1.0",
     "nodemon": "^2.0.6",
     "passport": "*",
-    "passport-jwt": "*"
+    "passport-jwt": "*",
+    "sanitize-html": "^2.1.2"
   },
   "repository": {
     "type": "git",

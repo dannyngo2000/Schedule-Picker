@@ -4,11 +4,11 @@ const bodyParser = require("body-parser");
 const cors = require("cors");
 const passport = require("passport");
 const mongoose = require("mongoose");
-
+const storage = require("node-persist");
 const config = require("./config/database");
 const app = express();
 const users = require("./routes/users");
-
+const api = require("./routes/api");
 //Connecting to database
 const db = mongoose
   .connect(config.database, {
@@ -41,6 +41,7 @@ app.use(passport.session());
 
 require("./config/passport")(passport);
 app.use("/users", users);
+app.use("/api", api);
 //Set static folder
 
 app.use(express.static(path.join(__dirname, "public")));

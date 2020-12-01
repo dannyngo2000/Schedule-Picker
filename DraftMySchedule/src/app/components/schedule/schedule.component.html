@@ -1,0 +1,8 @@
+
+<div class = "schedule">
+    <h3>Create new schedule: </h3>
+    <input class="input" placeholder = "Enter new schedule name" [value]="scheduleName" (input)="scheduleName = $event.target.value"/>
+    <button (click)="createSchedule()" >Create</button>
+    </div>
+    
+    

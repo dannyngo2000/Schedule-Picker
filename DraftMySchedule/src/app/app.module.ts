@@ -18,6 +18,15 @@ import { ValidateService } from '../app/services/validate.service';
 import { AuthService } from '../app/services/auth.service';
 import { JwtModule, JwtHelperService } from '@auth0/angular-jwt';
 import { AuthGuard } from './guard/auth.guard';
+import { MatCardModule } from '@angular/material/card';
+import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatButtonModule } from '@angular/material/button';
+import { CourseDetailCardsComponent } from './components/course-detail-cards/course-detail-cards.component';
+import { SubjectComponentComponent } from './components/subject-component/subject-component.component';
+import { ScheduleComponent } from './components/schedule/schedule.component';
+import { CurrentScheduleComponent } from './components/current-schedule/current-schedule.component';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+
 const appRoutes: Routes = [
   {
     path: '',
@@ -42,6 +51,9 @@ const appRoutes: Routes = [
     component: ProfileComponent,
     canActivate: [AuthGuard],
   },
+  {
+    path: 'guest',
+  },
 ];
 export function tokenGetter() {
   return localStorage.getItem('id_token');
@@ -55,6 +67,14 @@ export function tokenGetter() {
     HomeComponent,
     DashboardComponent,
     ProfileComponent,
+
+    CourseDetailCardsComponent,
+
+    SubjectComponentComponent,
+
+    ScheduleComponent,
+
+    CurrentScheduleComponent,
   ],
   imports: [
     BrowserModule,
@@ -71,6 +91,10 @@ export function tokenGetter() {
         disallowedRoutes: ['http://locahost:4200/dashboard/'],
       },
     }),
+    NoopAnimationsModule,
+    MatCardModule,
+    MatToolbarModule,
+    MatButtonModule,
   ],
   providers: [ValidateService, AuthService, AuthGuard],
   bootstrap: [AppComponent],
