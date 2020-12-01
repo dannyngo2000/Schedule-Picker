@@ -72,9 +72,18 @@ export class AuthService {
     let headers = new HttpHeaders().set('Authorization', this.authToken);
     let body = {
       username: username,
-      password: newPassword,
+      newPassword: newPassword,
     };
     return this.http.post('http://localhost:3000/users/updatePassword', body, {
+      headers: headers,
+    });
+  }
+  deactivate(username: string) {
+    let headers = new HttpHeaders().set('Authorization', this.authToken);
+    let body = {
+      username: username,
+    };
+    return this.http.post('http://localhost:3000/users/deactivate', body, {
       headers: headers,
     });
   }

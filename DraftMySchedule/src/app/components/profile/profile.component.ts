@@ -12,7 +12,11 @@ export class ProfileComponent implements OnInit {
   user: User;
   newPassword: string;
   confirmedPassword: string;
+  accountName: string;
   ngOnInit(): void {
+    this.updateProfile();
+  }
+  updateProfile() {
     this.authService.getProfile().subscribe((profile) => {
       this.user = profile;
 
@@ -24,8 +28,11 @@ export class ProfileComponent implements OnInit {
   }
   onSubmit() {
     console.log(this.user.username);
-    if (this.newPassword != this.confirmedPassword) {
-      alert('The password does not match');
+    if (
+      this.newPassword != this.confirmedPassword ||
+      (this.newPassword == null && this.confirmedPassword == null)
+    ) {
+      alert('Something went wrong');
       this.newPassword = '';
       this.confirmedPassword = '';
       return false;
@@ -37,5 +44,12 @@ export class ProfileComponent implements OnInit {
       this.newPassword = '';
       this.confirmedPassword = '';
     }
+  }
+  deactivate() {
+    console.log(this.user.password);
+    this.accountName = this.user.name.toString();
+    this.authService
+      .deactivate(this.accountName)
+      .subscribe((data) => console.log(data));
   }
 }

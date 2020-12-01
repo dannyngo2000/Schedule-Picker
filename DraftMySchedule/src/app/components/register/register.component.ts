@@ -27,6 +27,7 @@ export class RegisterComponent implements OnInit {
       username: this.username,
       email: this.email,
       password: this.password,
+      activate: true,
     };
     //Require Fields
     if (!this.validateService.validateRegister(user)) {

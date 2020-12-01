@@ -13,6 +13,7 @@ router.post("/register", (req, res, next) => {
     email: req.body.email,
     username: req.body.username,
     password: req.body.password,
+    activate: req.body.activate,
   });
 
   //Adding new data to the User database
@@ -68,7 +69,7 @@ router.get(
     res.send(req.user);
   }
 );
-
+//Update password
 router.post(
   "/updatePassword",
   passport.authenticate("jwt", { session: false }),
@@ -93,6 +94,22 @@ router.post(
   }
 );
 
+router.post(
+  "/deactivate",
+  passport.authenticate("jwt", { session: false }),
+  (req, res, send) => {
+    let username = req.body.username;
+
+    User.findOneAndUpdate(
+      { username: username },
+      { activate: false },
+      function (err, result) {
+        if (err) res.send(err);
+        else res.send(result);
+      }
+    );
+  }
+);
 //Validate
 
 router.get("/validate", (req, res, next) => {
