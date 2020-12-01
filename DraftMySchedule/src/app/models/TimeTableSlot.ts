@@ -8,4 +8,5 @@ export class TimeTableSlot {
   ssr_component: string;
   class_section: string;
   className: string;
+  collapsed: boolean;
 }

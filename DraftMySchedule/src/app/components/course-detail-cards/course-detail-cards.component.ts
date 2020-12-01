@@ -13,7 +13,9 @@ export class CourseDetailCardsComponent implements OnInit {
   ngOnInit(): void {}
   displayTimetableSlot(timetableSlot: TimeTableSlot[]): void {
     this.timetables = timetableSlot;
-    console.log(this.timetables);
+    for (var timetable of this.timetables) {
+      timetable.collapsed = true;
+    }
   }
   print(): void {
     console.log('hi');

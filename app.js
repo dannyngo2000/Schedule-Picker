@@ -9,6 +9,7 @@ const config = require("./config/database");
 const app = express();
 const users = require("./routes/users");
 const api = require("./routes/api");
+let similarity = require("string-similarity");
 //Connecting to database
 const db = mongoose
   .connect(config.database, {

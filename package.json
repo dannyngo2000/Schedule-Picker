@@ -18,7 +18,8 @@
     "nodemon": "^2.0.6",
     "passport": "*",
     "passport-jwt": "*",
-    "sanitize-html": "^2.1.2"
+    "sanitize-html": "^2.1.2",
+    "string-similarity": "^4.0.3"
   },
   "repository": {
     "type": "git",

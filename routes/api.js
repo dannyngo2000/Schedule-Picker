@@ -8,6 +8,7 @@ const bcrypt = require("bcryptjs");
 const timetables = require("../Lab3-timetable-data.json");
 const sanitizeHTML = require("sanitize-html");
 const storage = require("node-persist");
+const stringSimilarity = require("string-similarity");
 var courses = [];
 
 const reviewStorage = storage.create({ dir: "review", ttl: 3000 });
@@ -152,5 +153,55 @@ router.get("/open/getAllCourseCodes/:subjectCode", (req, res, next) => {
       message: `${subjectCode} does not exist`,
     });
   }
+});
+/**@GET GET course by keyword of ClassName */
+router.get("/open/getKeyWordClassName/:keyword", (req, res, next) => {
+  let { keyword } = req.params;
+  let result = [];
+  timetables.forEach((timetable) => {
+    let num = stringSimilarity.compareTwoStrings(
+      keyword.toLowerCase(),
+      timetable.className.toLowerCase()
+    );
+    if (num >= 0.3) {
+      result.push({
+        courseCode: timetable.catalog_nbr,
+        subject: timetable.subject,
+        start_time: timetable.course_info[0].start_time,
+        end_time: timetable.course_info[0].end_time,
+        class_nbr: timetable.course_info[0].class_nbr,
+        campus: timetable.course_info[0].campus,
+        ssr_component: timetable.course_info[0].ssr_component,
+        class_section: timetable.course_info[0].class_section,
+        className: timetable.className,
+      });
+    }
+  });
+  if (result.length != 0) res.status(200).send(result);
+});
+/**@GET GET Keyword Class NUM */
+router.get("/open/getKeyWordClassNum/:keyword", (req, res, next) => {
+  let { keyword } = req.params;
+  let result = [];
+  timetables.forEach((timetable) => {
+    let num = stringSimilarity.compareTwoStrings(
+      keyword.toLowerCase(),
+      timetable.className.toLowerCase()
+    );
+    if (num >= 0.3) {
+      result.push({
+        courseCode: timetable.catalog_nbr,
+        subject: timetable.subject,
+        start_time: timetable.course_info[0].start_time,
+        end_time: timetable.course_info[0].end_time,
+        class_nbr: timetable.course_info[0].class_nbr,
+        campus: timetable.course_info[0].campus,
+        ssr_component: timetable.course_info[0].ssr_component,
+        class_section: timetable.course_info[0].class_section,
+        className: timetable.className,
+      });
+    }
+  });
+  if (result.length != 0) res.status(200).send(result);
 });
 module.exports = router;
