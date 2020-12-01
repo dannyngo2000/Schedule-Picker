@@ -4,10 +4,14 @@
         <option> </option>
         <option *ngFor="let schedule of scheduleListUpdate$|async " [value] = "schedule"> {{schedule}}  </option>
     </select>
+    
+</div>
     <button (click) ="selectSchedule()">Select</button>
     <button (click) = "updateSchedule()" [disabled]="scheduleName==='' ">Update</button>
     <button (click) ="deleteCurrentSchedule()"[disabled]="scheduleName==='' ">Delete</button>
     <button (click) ="deleteAllSchedule()"[disabled]="scheduleName==='' ">Delete ALL</button>
     <button (click) = "display()"[disabled]="scheduleName==='' ">Display</button>
-</div>
+<br>
+<br>
+
 <app-course-detail-cards > </app-course-detail-cards>

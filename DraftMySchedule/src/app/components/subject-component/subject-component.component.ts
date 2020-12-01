@@ -35,7 +35,7 @@ export class SubjectComponentComponent implements OnInit {
     private renderer: Renderer2,
     private element: ElementRef
   ) {}
-
+  keyword: string;
   ngOnInit(): void {
     this.courseService.getAllSubjects().subscribe((data) => {
       this.subjects = data;
@@ -92,9 +92,16 @@ export class SubjectComponentComponent implements OnInit {
       .getCourseCodeForSelectedSubject(this.selectedSubject)
       .subscribe((data) => {
         this.timetableSlot = data;
+        console.log(data);
         this.currentSchedule.courseDetail.displayTimetableSlot(
           this.timetableSlot
         );
       });
+  }
+  searchByClassName() {
+    console.log(this.keyword);
+  }
+  searchByCourseCode() {
+    console.log(this.keyword);
   }
 }

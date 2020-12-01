@@ -13,7 +13,7 @@ var courses = [];
 const reviewStorage = storage.create({ dir: "review", ttl: 3000 });
 const scheduleListStorage = storage.create({ dir: "schedules", ttl: 3000 });
 
-router.get("/open/getAllSubjects", (req, res, next) => {
+router.get("/open/subjects", (req, res, next) => {
   var temp = [];
   timetables.forEach((timetable) => {
     temp.push({
@@ -92,6 +92,8 @@ router.get(
             class_nbr: timetable.course_info[0].class_nbr,
             campus: timetable.course_info[0].campus,
             ssr_component: timetable.course_info[0].ssr_component,
+            class_section: timetable.course_info[0].class_section,
+            className: timetable.className,
           });
         } else if (!component) {
           data.push({
@@ -102,6 +104,8 @@ router.get(
             class_nbr: timetable.course_info[0].class_nbr,
             campus: timetable.course_info[0].campus,
             ssr_component: timetable.course_info[0].ssr_component,
+            class_section: timetable.course_info[0].class_section,
+            className: timetable.className,
           });
         }
       }
@@ -135,6 +139,8 @@ router.get("/open/getAllCourseCodes/:subjectCode", (req, res, next) => {
         class_nbr: timetable.course_info[0].class_nbr,
         campus: timetable.course_info[0].campus,
         ssr_component: timetable.course_info[0].ssr_component,
+        class_section: timetable.course_info[0].class_section,
+        className: timetable.className,
       });
     }
   });

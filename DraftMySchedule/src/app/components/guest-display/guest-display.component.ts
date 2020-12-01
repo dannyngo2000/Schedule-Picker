@@ -1,15 +1,12 @@
-import { Component, OnInit } from '@angular/core';
-
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { SubjectComponentComponent } from '../subject-component/subject-component.component';
 @Component({
   selector: 'app-guest-display',
   templateUrl: './guest-display.component.html',
-  styleUrls: ['./guest-display.component.css']
+  styleUrls: ['./guest-display.component.css'],
 })
 export class GuestDisplayComponent implements OnInit {
+  constructor() {}
 
-  constructor() { }
-
-  ngOnInit(): void {
-  }
-
+  ngOnInit(): void {}
 }

@@ -2,7 +2,7 @@ import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { from } from 'rxjs';
 import { CoursesService } from '../../services/courses.service';
 import { CurrentScheduleComponent } from '../current-schedule/current-schedule.component';
-
+import { AuthService } from '../../services/auth.service';
 @Component({
   selector: 'app-schedule',
   templateUrl: './schedule.component.html',
@@ -11,9 +11,14 @@ import { CurrentScheduleComponent } from '../current-schedule/current-schedule.c
 export class ScheduleComponent implements OnInit {
   @ViewChild(CurrentScheduleComponent)
   selectedScheduleComponent: CurrentScheduleComponent;
-  constructor(private courseService: CoursesService) {}
+  constructor(
+    private courseService: CoursesService,
+    public authService: AuthService
+  ) {}
   scheduleName: string = '';
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    console.log(this.authService.authToken);
+  }
   createSchedule() {
     if (this.scheduleName == '') alert('Please enter a schedule name');
     this.courseService.createNewSchedule(this.scheduleName).subscribe(

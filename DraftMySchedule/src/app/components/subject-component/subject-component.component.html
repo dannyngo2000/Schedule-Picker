@@ -16,15 +16,20 @@
         <option></option>
         <option *ngFor="let component of components " [value] = "component"> {{component}} 
     </select>
-    <button (click)="searchClick()">
-        Search
-    </button>
-    <button (click) = "searchAll()">
-        Search All Codes
-    </button>
+   
+</div>
+<div class= "search-by">
+<button (click)="searchClick()">
+    Search
+</button>
+<button (click) = "searchAll()">
+    Search All Codes
+</button>
+<input [(ngModel)] ="keyword" name ="keyword" placeholder="Search by keyword">
+<button (click) ="searchByClassName()">Search by Class Name</button>
+<button (click) ="searchByCourseCode()">Search by Course Code</button>
 </div>
 <app-schedule> 
 </app-schedule>
 <app-current-schedule>
-   
  </app-current-schedule>

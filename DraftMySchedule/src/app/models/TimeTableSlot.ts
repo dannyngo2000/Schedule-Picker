@@ -6,4 +6,6 @@ export class TimeTableSlot {
   class_nbr: number;
   campus: string;
   ssr_component: string;
+  class_section: string;
+  className: string;
 }

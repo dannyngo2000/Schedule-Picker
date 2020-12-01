@@ -54,6 +54,7 @@ const appRoutes: Routes = [
   },
   {
     path: 'guest',
+    component: GuestDisplayComponent,
   },
 ];
 export function tokenGetter() {

@@ -9,10 +9,11 @@ import { CoursesService } from '../../services/courses.service';
 export class CourseDetailCardsComponent implements OnInit {
   timetables: TimeTableSlot[];
   constructor(private courseService: CoursesService) {}
-
+  collapsed: boolean = true;
   ngOnInit(): void {}
   displayTimetableSlot(timetableSlot: TimeTableSlot[]): void {
     this.timetables = timetableSlot;
+    console.log(this.timetables);
   }
   print(): void {
     console.log('hi');
