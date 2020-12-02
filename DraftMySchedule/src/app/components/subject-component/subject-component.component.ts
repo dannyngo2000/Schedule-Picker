@@ -99,9 +99,28 @@ export class SubjectComponentComponent implements OnInit {
       });
   }
   searchByClassName() {
-    console.log(this.keyword);
+    this.courseService.getByClassNameKeyword(this.keyword).subscribe(
+      (data) => {
+        if (data.length == 0) alert('There is no matching');
+        else {
+          this.timetableSlot = data;
+          this.currentSchedule.courseDetail.displayTimetableSlot(
+            this.timetableSlot
+          );
+        }
+      },
+      (err) => alert('The keyword does not match')
+    );
   }
   searchByCourseCode() {
-    console.log(this.keyword);
+    this.courseService.getByClassNumKeyword(this.keyword).subscribe(
+      (data) => {
+        this.timetableSlot = data;
+        this.currentSchedule.courseDetail.displayTimetableSlot(
+          this.timetableSlot
+        );
+      },
+      (err) => alert('The keyword does not match')
+    );
   }
 }

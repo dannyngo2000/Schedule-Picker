@@ -7,12 +7,16 @@ const config = require("../config/database");
 const bcrypt = require("bcryptjs");
 const timetables = require("../Lab3-timetable-data.json");
 const sanitizeHTML = require("sanitize-html");
-const storage = require("node-persist");
 const stringSimilarity = require("string-similarity");
 var courses = [];
-
-const reviewStorage = storage.create({ dir: "review", ttl: 3000 });
-const scheduleListStorage = storage.create({ dir: "schedules", ttl: 3000 });
+let authorSchedule = [];
+const storage = require("node-persist");
+const myStorage = storage.create({ dir: ".node-persist/reviews", ttl: 90000 });
+let initializePersist = async function () {
+  await storage.init();
+  await myStorage.init();
+};
+initializePersist();
 
 router.get("/open/subjects", (req, res, next) => {
   var temp = [];
@@ -155,7 +159,7 @@ router.get("/open/getAllCourseCodes/:subjectCode", (req, res, next) => {
   }
 });
 /**@GET GET course by keyword of ClassName */
-router.get("/open/getKeyWordClassName/:keyword", (req, res, next) => {
+router.get("/open/getKeywordClassName/:keyword", (req, res, next) => {
   let { keyword } = req.params;
   let result = [];
   timetables.forEach((timetable) => {
@@ -178,17 +182,18 @@ router.get("/open/getKeyWordClassName/:keyword", (req, res, next) => {
     }
   });
   if (result.length != 0) res.status(200).send(result);
+  else res.status(404).send(`The ${keyword} does not match`);
 });
 /**@GET GET Keyword Class NUM */
-router.get("/open/getKeyWordClassNum/:keyword", (req, res, next) => {
+router.get("/open/getKeywordClassNum/:keyword", (req, res, next) => {
   let { keyword } = req.params;
   let result = [];
   timetables.forEach((timetable) => {
     let num = stringSimilarity.compareTwoStrings(
       keyword.toLowerCase(),
-      timetable.className.toLowerCase()
+      timetable.catalog_nbr.toString().toLowerCase()
     );
-    if (num >= 0.3) {
+    if (num >= 0.4) {
       result.push({
         courseCode: timetable.catalog_nbr,
         subject: timetable.subject,
@@ -203,5 +208,125 @@ router.get("/open/getKeyWordClassNum/:keyword", (req, res, next) => {
     }
   });
   if (result.length != 0) res.status(200).send(result);
+  else res.status(404).send(`The ${keyword} does not match`);
+});
+
+/** @POST POST CREATE new timetable name **/
+router.post(
+  "/private/schedule/:scheduleName/:author/",
+  passport.authenticate("jwt", { session: false }),
+  async (req, res) => {
+    var scheduleName = req.params.scheduleName.toString();
+    let author = req.params.author.toString();
+    let status = req.body.status;
+    console.log(status);
+    scheduleName = sanitizeHTML(scheduleName, {
+      allowedTags: [],
+      allowedAttributes: [],
+    });
+    let time = getTime();
+    try {
+      if ((await storage.get(scheduleName)) == null && scheduleName != "") {
+        await storage.setItem(scheduleName, [
+          { author: author },
+          { status: status },
+          { time: time },
+        ]);
+        await res.status(201).json({
+          msg: `Added ${scheduleName}`,
+        });
+      } else {
+        res
+          .status(403)
+          .send(`The name ${scheduleName} is already existed or not valid`);
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  }
+);
+//@GET a list of schedule name and number of courses are saved in each schedule from an author
+
+router.get("/private/getAuthorSchedule/:authorName", async (req, res, next) => {
+  let name = req.params.authorName;
+  let keys = await storage.keys();
+  try {
+    responses = keys.map(async (key) => {
+      let currentItem = await storage.get(key);
+      if (currentItem[0].author == name) {
+        return {
+          scheduleName: key,
+          author: currentItem[0].author,
+          status: currentItem[1].status,
+          time: currentItem[2].time,
+          length: (currentItem.length - 3).toString(),
+        };
+      } else {
+      }
+    });
+    Promise.all(responses).then((response) => {
+      if (response != null) res.status(200).send(response);
+    });
+  } catch (err) {
+    console.log(rrr);
+  }
+});
+//@GET GET list of subject and course codes from a given schedule of an author
+router.get(
+  "/private/getSchedule/:scheduleName",
+  passport.authenticate("jwt", { session: false }),
+  async (req, res, next) => {
+    var scheduleNamed = req.params.scheduleName;
+
+    scheduleNamed = sanitizeHTML(scheduleNamed, {
+      allowedTags: [],
+      allowedAttributes: [],
+    });
+    try {
+      const existing = await storage.get(scheduleNamed);
+      if (existing) {
+        //var list = await storage.get(scheduleNamed);
+
+        res.status(200).send(existing);
+      } else {
+        res.status(404).send(`The schedule ${scheduleNamed} is not existed`);
+      }
+    } catch (err) {
+      console.log(err);
+    }
+    res.send("hi");
+  }
+);
+let getTime = function () {
+  var currentDate = new Date();
+  var dateTime =
+    currentDate.getDate() +
+    "/" +
+    (currentDate.getMonth() + 1) +
+    "/" +
+    currentDate.getFullYear() +
+    " @ " +
+    currentDate.getHours() +
+    ":" +
+    currentDate.getMinutes() +
+    ":" +
+    currentDate.getSeconds();
+  return dateTime;
+};
+/**@DELETE schedule */
+router.delete("/private/schedule/:scheduleName", async (req, res) => {
+  var scheduleName = req.params.scheduleName.toString();
+  scheduleName = sanitizeHTML(scheduleName, {
+    allowedTags: [],
+    allowedAttributes: [],
+  });
+  try {
+    await storage.removeItem(scheduleName);
+    res.status(204).json({
+      msg: `successfully removed ${scheduleName}`,
+    });
+  } catch (err) {
+    console.log(err);
+  }
 });
 module.exports = router;

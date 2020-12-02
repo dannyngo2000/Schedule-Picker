@@ -24,4 +24,7 @@ export class DashboardComponent implements OnInit {
         console.log(err);
       };
   }
+  goToSchedule() {
+    this.router.navigate(['/authorizeUser']);
+  }
 }

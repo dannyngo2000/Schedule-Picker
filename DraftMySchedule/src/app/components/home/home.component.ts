@@ -7,9 +7,13 @@ import { Router } from '@angular/router';
   styleUrls: ['./home.component.css'],
 })
 export class HomeComponent implements OnInit {
-  constructor(public router: Router) {}
+  constructor(public router: Router, public authService: AuthService) {}
+  token: string;
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.token = localStorage.getItem('id_token');
+    console.log(this.token);
+  }
   try() {
     this.router.navigate(['/guest']);
   }

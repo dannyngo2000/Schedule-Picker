@@ -24,13 +24,16 @@ export class CurrentScheduleComponent implements OnInit {
   currentCourse: ScheduleCourse;
   ngOnInit(): void {
     this.courseService
-      .getAllSchedules()
-      .subscribe((data) => (this.scheduleLists = data));
+      .getAllFromAuthorSchedules(localStorage.getItem('username'))
+      .subscribe((data) => {
+        console.log(data);
+        this.scheduleLists = data;
+      });
     console.log('Hi');
   }
 
   selectSchedule(): void {
-    this.scheduleName = this.scheduleDropdown.split(' -')[0].slice(5);
+    this.scheduleName = this.scheduleDropdown.split(' -')[0].slice(14);
     this.courseService.courseList = [];
     this.courseService.count = 1;
     console.log(this.scheduleName);
@@ -50,13 +53,7 @@ export class CurrentScheduleComponent implements OnInit {
       });
     this.scheduleName = '';
   }
-  deleteAllSchedule() {
-    this.courseService.deleteAllSchedule().subscribe((data) => {
-      alert('All schedules are deleted');
-      this.courseService.updateScheduleList();
-    });
-    this.scheduleName = '';
-  }
+
   display() {
     this.timetables = [];
     this.courseService

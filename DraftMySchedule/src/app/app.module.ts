@@ -27,6 +27,7 @@ import { ScheduleComponent } from './components/schedule/schedule.component';
 import { CurrentScheduleComponent } from './components/current-schedule/current-schedule.component';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { GuestDisplayComponent } from './components/guest-display/guest-display.component';
+import { AuthorizedUserComponent } from './components/authorized-user/authorized-user.component';
 
 const appRoutes: Routes = [
   {
@@ -56,6 +57,11 @@ const appRoutes: Routes = [
     path: 'guest',
     component: GuestDisplayComponent,
   },
+  {
+    path: 'authorizeUser',
+    component: AuthorizedUserComponent,
+    canActivate: [AuthGuard],
+  },
 ];
 export function tokenGetter() {
   return localStorage.getItem('id_token');
@@ -79,6 +85,8 @@ export function tokenGetter() {
     CurrentScheduleComponent,
 
     GuestDisplayComponent,
+
+    AuthorizedUserComponent,
   ],
   imports: [
     BrowserModule,

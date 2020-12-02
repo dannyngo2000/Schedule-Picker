@@ -4,4 +4,4 @@
 <h4>This is an application that is similar to  Draft My Schedule from the University of Western Ontario </h4>
 
 </div>
-<button (click) ="try()"> Try as a Guest</button>
+<button [disabled]= "token !== null" (click) ="try()"> Try as a Guest</button>

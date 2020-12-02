@@ -16,19 +16,30 @@ export class ScheduleComponent implements OnInit {
     public authService: AuthService
   ) {}
   scheduleName: string = '';
+  token: string;
   ngOnInit(): void {
-    console.log(this.authService.authToken);
+    this.token = localStorage.getItem('id_token');
   }
   createSchedule() {
+    let status = 'private';
     if (this.scheduleName == '') alert('Please enter a schedule name');
-    this.courseService.createNewSchedule(this.scheduleName).subscribe(
-      (data) => {
-        alert(`Added ` + this.scheduleName);
-        this.courseService.updateScheduleList();
-      },
-      (err) => alert('This schedule name is already existed')
-    );
+    else {
+      this.courseService
+        .createNewSchedule(
+          this.scheduleName,
+          localStorage.getItem('username').toString(),
+          this.authService.authToken,
+          status
+        )
+        .subscribe(
+          (data) => {
+            alert(`Added ` + this.scheduleName);
+            this.courseService.updateScheduleList();
+          },
+          (err) => alert('This schedule name is already existed')
+        );
 
-    this.scheduleName = '';
+      this.scheduleName = '';
+    }
   }
 }

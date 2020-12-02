@@ -5,6 +5,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { Message } from '../models/Message';
 import { User } from '../models/User';
 import { JwtHelperService } from '@auth0/angular-jwt';
+import { ThrowStmt } from '@angular/compiler';
 @Injectable({
   providedIn: 'root',
 })
@@ -13,7 +14,7 @@ export class AuthService {
   user: any;
   helper = new JwtHelperService();
   constructor(private http: HttpClient, public jwtHelper: JwtHelperService) {}
-
+  currentUser: string;
   //register to the api
   registerUser(user): Observable<Message> {
     let headers = new HttpHeaders();
@@ -60,6 +61,7 @@ export class AuthService {
   storeUserData(token, user) {
     localStorage.setItem('id_token', token);
     localStorage.setItem('user', JSON.stringify(user));
+    localStorage.setItem('username', user.user);
     this.authToken = token;
     this.user = user;
   }
