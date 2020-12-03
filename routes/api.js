@@ -11,6 +11,7 @@ const stringSimilarity = require("string-similarity");
 var courses = [];
 let authorSchedule = [];
 const storage = require("node-persist");
+const { response } = require("express");
 const myStorage = storage.create({
   dir: ".node-persist/reviews",
   ttl: 9999999,
@@ -256,6 +257,7 @@ router.get("/private/getAuthorSchedule/:authorName", async (req, res, next) => {
   try {
     responses = keys.map(async (key) => {
       let currentItem = await storage.get(key);
+
       if (currentItem[0].author == name) {
         return {
           scheduleName: key,
@@ -264,14 +266,18 @@ router.get("/private/getAuthorSchedule/:authorName", async (req, res, next) => {
           time: currentItem[2].time,
           length: (currentItem.length - 3).toString(),
         };
-      } else {
       }
     });
+
     Promise.all(responses).then((response) => {
-      if (response != null) res.status(200).send(response);
+      response = response.filter((item) => {
+        return item !== undefined;
+      });
+      console.log(response);
+      res.status(200).send(response);
     });
   } catch (err) {
-    console.log(rrr);
+    console.log(err);
   }
 });
 //@GET GET list of subject and course codes from a given schedule of an author

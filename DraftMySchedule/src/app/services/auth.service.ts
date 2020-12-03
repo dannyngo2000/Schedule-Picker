@@ -71,7 +71,7 @@ export class AuthService {
     const role = localStorage.getItem('role');
     // Check whether the token is expired and return
     // true or false
-    if (role) {
+    if (role === 'admin') {
       return true;
     } else return false;
   }
@@ -104,9 +104,22 @@ export class AuthService {
     let body = {
       username: username,
     };
-    return this.http.post('http://localhost:3000/users/deactivate', body, {
-      headers: headers,
-    });
+    return this.http.post(
+      'http://localhost:3000/users/deactivate',
+      body,
+      httpOptions
+    );
+  }
+  activate(username: string) {
+    let headers = new HttpHeaders().set('Authorization', this.authToken);
+    let body = {
+      username: username,
+    };
+    return this.http.post(
+      'http://localhost:3000/users/activate',
+      body,
+      httpOptions
+    );
   }
   getAllUsers(): Observable<Clients[]> {
     return this.http.get<Clients[]>(

@@ -68,6 +68,7 @@ const appRoutes: Routes = [
   {
     path: 'manage',
     component: ManageUserComponent,
+    canActivate: [AuthGuard],
   },
 ];
 export function tokenGetter() {
