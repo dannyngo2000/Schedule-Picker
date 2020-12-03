@@ -141,6 +141,22 @@ router.post(
     );
   }
 );
+router.post(
+  "/setAdmin",
+  passport.authenticate("jwt", { session: false }),
+  (req, res, send) => {
+    let username = req.body.username;
+    console.log("hi");
+    User.findOneAndUpdate(
+      { username: username },
+      { role: "admin" },
+      function (err, result) {
+        if (err) res.send(err);
+        else res.status(200).send(result);
+      }
+    );
+  }
+);
 //Validate
 
 router.get("/validate", (req, res, next) => {

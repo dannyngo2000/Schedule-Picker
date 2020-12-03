@@ -16,7 +16,9 @@ export class ClientDetailCardComponent implements OnInit {
     console.log(clients);
   }
   grantAdmin(username: string) {
-    console.log(username);
+    this.authService
+      .setAdmin(username)
+      .subscribe((data) => alert(`Set ${username} as admin`));
   }
   deactivate(username: string) {
     this.authService

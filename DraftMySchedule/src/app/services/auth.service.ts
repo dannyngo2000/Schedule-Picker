@@ -121,6 +121,16 @@ export class AuthService {
       httpOptions
     );
   }
+  setAdmin(username: string) {
+    let body = {
+      username: username,
+    };
+    return this.http.post(
+      'http://localhost:3000/users/setAdmin',
+      body,
+      httpOptions
+    );
+  }
   getAllUsers(): Observable<Clients[]> {
     return this.http.get<Clients[]>(
       'http://localhost:3000/users/getAllUsers',
