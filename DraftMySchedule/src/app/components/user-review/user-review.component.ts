@@ -14,11 +14,16 @@ import { Reviews } from '../../models/Reviews';
 export class UserReviewComponent implements OnInit {
   reviews: Reviews[];
   constructor() {}
-
+  role: string = localStorage.getItem('role');
   ngOnInit(): void {}
   displayReviews(reviews: Reviews[]) {
+    reviews = reviews.filter((review) => {
+      if (review.hidden == false) {
+        return true;
+      }
+    });
+
     this.reviews = reviews;
-    console.log(this.reviews);
   }
   hide() {
     console.log('nope');

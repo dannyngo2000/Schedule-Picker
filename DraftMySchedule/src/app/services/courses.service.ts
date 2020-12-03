@@ -158,6 +158,7 @@ export class CoursesService {
         review: review,
         username: username,
         time: getTime(),
+        hidden: false,
       },
     ];
     return this.http.post(

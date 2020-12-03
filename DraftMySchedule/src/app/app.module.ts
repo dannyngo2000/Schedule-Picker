@@ -31,6 +31,7 @@ import { AuthorizedUserComponent } from './components/authorized-user/authorized
 import { UserReviewComponent } from './components/user-review/user-review.component';
 import { ManageUserComponent } from './components/manage-user/manage-user.component';
 import { ClientDetailCardComponent } from './components/client-detail-card/client-detail-card.component';
+import { ManageReviewComponent } from './components/manage-review/manage-review.component';
 
 const appRoutes: Routes = [
   {
@@ -70,6 +71,10 @@ const appRoutes: Routes = [
     component: ManageUserComponent,
     canActivate: [AuthGuard],
   },
+  {
+    path: 'manageReview',
+    component: ManageReviewComponent,
+  },
 ];
 export function tokenGetter() {
   return localStorage.getItem('id_token');
@@ -100,6 +105,7 @@ export function tokenGetter() {
 
     ClientDetailCardComponent,
     ManageUserComponent,
+    ManageReviewComponent,
   ],
   imports: [
     BrowserModule,

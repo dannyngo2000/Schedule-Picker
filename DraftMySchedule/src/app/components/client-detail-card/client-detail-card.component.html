@@ -7,7 +7,7 @@
         <mat-card-content>Role : {{client.role}}</mat-card-content>
         <mat-card-content>Activate: {{client.activate}}</mat-card-content>
        
-        <button  (click) = "grantAdmin(client.username)" class="add-button"> Grant Admin</button>
+        <button  (click) = "grantAdmin(client.username)" [disabled] = "client.role === 'admin'" class="add-button"> Grant Admin</button>
         <button  (click) = "deactivate(client.username)" [disabled]="client.role ==='admin' || client.activate === false" class="add-button"> Deactivate</button>
         <button   (click) ="activate(client.username)" [disabled] ="client.activate === true"> Activate</button>
        
