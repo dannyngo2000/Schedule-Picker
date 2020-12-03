@@ -11,6 +11,7 @@ import { CourseCode } from '../../models/CourseCode';
 import { TimeTableSlot } from '../../models/TimeTableSlot';
 import { CourseDetailCardsComponent } from '../course-detail-cards/course-detail-cards.component';
 import { CurrentScheduleComponent } from '../current-schedule/current-schedule.component';
+import { UserReviewComponent } from '../user-review/user-review.component';
 @Component({
   selector: 'app-subject-component',
   templateUrl: './subject-component.component.html',
@@ -21,6 +22,10 @@ export class SubjectComponentComponent implements OnInit {
   courseDetail: CourseDetailCardsComponent;
   @ViewChild(CurrentScheduleComponent)
   currentSchedule: CurrentScheduleComponent;
+  @ViewChild(UserReviewComponent)
+  userReview: UserReviewComponent;
+  review: string;
+  courseID: string;
   hideElement: true;
   subjects: Subject[];
   subjectCodes: Subject[];
@@ -122,5 +127,17 @@ export class SubjectComponentComponent implements OnInit {
       },
       (err) => alert('The keyword does not match')
     );
+  }
+  addReview() {
+    this.courseService
+      .postReview(this.review, localStorage.getItem('username'), this.courseID)
+      .subscribe((data) => alert('Added comment'));
+  }
+  showReview() {
+    let reviews: any = [];
+    this.courseService.getReview(this.courseID).subscribe((data) => {
+      reviews = data;
+      this.userReview.displayReviews(reviews);
+    });
   }
 }

@@ -8,6 +8,9 @@ import { CoursesService } from '../../services/courses.service';
 })
 export class CourseDetailCardsComponent implements OnInit {
   timetables: TimeTableSlot[];
+  token: string = localStorage.getItem('id_token');
+  review: string;
+  classNum: string;
   constructor(private courseService: CoursesService) {}
   collapsed: boolean = true;
   ngOnInit(): void {}
@@ -25,6 +28,8 @@ export class CourseDetailCardsComponent implements OnInit {
       subject_code: subject,
       course_code: courseCode,
     });
+    this.courseService.counter++;
+    console.log(this.courseService.courseList);
   }
   getColor(component: string): string {
     switch (component) {
@@ -36,4 +41,13 @@ export class CourseDetailCardsComponent implements OnInit {
         return '#d580ff';
     }
   }
+  addReview(classNum: string) {
+    console.log(classNum);
+    /** this.courseService.postReview(
+      this.review,
+      localStorage.getItem('username'),
+      this.classNum
+    ); **/
+  }
+  displayReview() {}
 }

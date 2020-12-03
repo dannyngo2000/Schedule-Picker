@@ -1,6 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-
+import { MatSelectModule } from '@angular/material/select';
 import { HttpClientModule } from '@angular/common/http';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -28,6 +28,7 @@ import { CurrentScheduleComponent } from './components/current-schedule/current-
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { GuestDisplayComponent } from './components/guest-display/guest-display.component';
 import { AuthorizedUserComponent } from './components/authorized-user/authorized-user.component';
+import { UserReviewComponent } from './components/user-review/user-review.component';
 
 const appRoutes: Routes = [
   {
@@ -87,6 +88,8 @@ export function tokenGetter() {
     GuestDisplayComponent,
 
     AuthorizedUserComponent,
+
+    UserReviewComponent,
   ],
   imports: [
     BrowserModule,
@@ -107,6 +110,7 @@ export function tokenGetter() {
     MatCardModule,
     MatToolbarModule,
     MatButtonModule,
+    MatSelectModule,
   ],
   providers: [ValidateService, AuthService, AuthGuard],
   bootstrap: [AppComponent],

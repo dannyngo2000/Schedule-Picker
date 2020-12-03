@@ -29,14 +29,14 @@ export class ScheduleComponent implements OnInit {
           this.scheduleName,
           localStorage.getItem('username').toString(),
           this.authService.authToken,
-          status
+          'Private'
         )
         .subscribe(
           (data) => {
             alert(`Added ` + this.scheduleName);
             this.courseService.updateScheduleList();
           },
-          (err) => alert('This schedule name is already existed')
+          (err) => console.log(err)
         );
 
       this.scheduleName = '';

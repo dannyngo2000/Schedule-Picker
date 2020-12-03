@@ -11,7 +11,10 @@ const stringSimilarity = require("string-similarity");
 var courses = [];
 let authorSchedule = [];
 const storage = require("node-persist");
-const myStorage = storage.create({ dir: ".node-persist/reviews", ttl: 90000 });
+const myStorage = storage.create({
+  dir: ".node-persist/reviews",
+  ttl: 9999999,
+});
 let initializePersist = async function () {
   await storage.init();
   await myStorage.init();
@@ -219,7 +222,7 @@ router.post(
     var scheduleName = req.params.scheduleName.toString();
     let author = req.params.author.toString();
     let status = req.body.status;
-    console.log(status);
+    console.log("helllo");
     scheduleName = sanitizeHTML(scheduleName, {
       allowedTags: [],
       allowedAttributes: [],
@@ -294,7 +297,6 @@ router.get(
     } catch (err) {
       console.log(err);
     }
-    res.send("hi");
   }
 );
 let getTime = function () {
@@ -327,6 +329,89 @@ router.delete("/private/schedule/:scheduleName", async (req, res) => {
     });
   } catch (err) {
     console.log(err);
+  }
+});
+
+/**@PUT UPDATE the schedule **/
+router.put("/private/updateSchedule/:scheduleName", async function (req, res) {
+  var scheduleName = req.params.scheduleName.toString();
+  scheduleName = sanitizeHTML(scheduleName, {
+    allowedTags: [],
+    allowedAttributes: [],
+  });
+  var list = req.body;
+  console.log(list);
+  seen = [];
+  let result = [];
+  let filterCourses = [];
+  for (let i = 3; i < list.length; i++) {
+    filterCourses.push(list[i]);
+  }
+  filterCourses = filterCourses.filter(function (currentObject) {
+    if (currentObject.course_code in seen) {
+      return false;
+    } else {
+      seen[currentObject.course_code] = true;
+      return true;
+    }
+  });
+  filterCourses = filterCourses.filter(
+    (course) => course.subject_code && course.course_code
+  );
+
+  result.push(list[0]);
+  result.push(list[1]);
+  result.push(list[2]);
+  filterCourses.forEach((course) => result.push(course));
+
+  try {
+    if ((await storage.get(scheduleName)) != null) {
+      storage.updateItem(scheduleName, result);
+
+      res.status(200).json({
+        data: result,
+      });
+    } else {
+      res.status(404).send(`The schedule ${scheduleName} is not existed`);
+    }
+  } catch (err) {
+    console.log(err);
+  }
+});
+router.post(
+  "/private/addReview/:courseID",
+  passport.authenticate("jwt", { session: false }),
+  async function (req, res, next) {
+    let courseID = req.params.courseID;
+    let reviews = req.body;
+    let contain = false;
+
+    timetables.forEach((timetable) => {
+      if (timetable.course_info[0].class_nbr == courseID) {
+        contain = true;
+      }
+    });
+    if (contain) {
+      if ((await myStorage.getItem(courseID)) === undefined)
+        await myStorage.setItem(courseID, reviews);
+      else {
+        let currentReviews = await myStorage.getItem(courseID);
+        await currentReviews.push(reviews[0]);
+        await myStorage.setItem(courseID, currentReviews);
+      }
+      res.status(200).json({ message: "Successfully added" });
+    } else {
+      res.status(400).send("error");
+    }
+  }
+);
+router.get("/private/getReview/:courseID", async function (req, res, next) {
+  let courseID = req.params.courseID;
+  if ((await myStorage.getItem(courseID)) === undefined) {
+    res.status(400).send("There is currently no reviews yet");
+  } else if (await myStorage.getItem(courseID)) {
+    let result = await myStorage.getItem(courseID);
+    res.status(200).send(result);
   }
 });
 module.exports = router;

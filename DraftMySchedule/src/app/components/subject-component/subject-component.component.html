@@ -29,7 +29,16 @@
 <button (click) ="searchByClassName()">Search by Class Name</button>
 <button (click) ="searchByCourseCode()">Search by Course Code</button>
 </div>
+<div>
+<input [(ngModel)] = "
+courseID" name ="courseID" placeholder ="Enter the course ID">
+<input [(ngModel)] = "review" name ="review" placeholder ="What do you think?">
+<button (click) ="addReview()">Add Review</button>
+<button (click) ="showReview()">Display Review</button>
+</div>
 <app-schedule> 
 </app-schedule>
 <app-current-schedule>
  </app-current-schedule>
+
+ <app-user-review></app-user-review>

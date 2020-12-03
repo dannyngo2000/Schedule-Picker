@@ -1,0 +1,12 @@
+<div class="content" fxLayout="row wrap">
+    <div *ngFor ="let review of reviews">
+    <mat-card  class="mat-elevation-z5" >
+        <mat-card-title > Review  </mat-card-title>
+        <mat-card-content>Name : {{review.username}}</mat-card-content>
+        <mat-card-content>Date : {{review.time}}</mat-card-content>
+        <mat-card-content >Description : {{review.review}}</mat-card-content>
+        <button (click) ="hide()">Flag</button>
+    </mat-card>
+    
+    </div>
+</div>

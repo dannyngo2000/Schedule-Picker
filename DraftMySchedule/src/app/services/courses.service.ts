@@ -6,11 +6,13 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { ScheduleList } from '../models/ScheduleList';
 import { TimeTableSlot } from '../models/TimeTableSlot';
 import { ScheduleCourse } from '../models/ScheduleCourse';
+import { Reviews } from '../models/Reviews';
 import { map, switchMap } from 'rxjs/operators';
 
 const httpOptions = {
   headers: new HttpHeaders({
     'Content-Type': 'application/json',
+    Authorization: localStorage.getItem('id_token'),
   }),
 };
 
@@ -18,7 +20,8 @@ const httpOptions = {
   providedIn: 'root',
 })
 export class CoursesService {
-  courseList: ScheduleCourse[] = [];
+  courseList: any = [];
+  counter: number = 0;
   count: number = 0;
   private scheduleListUpdate = new BehaviorSubject('');
   schedule$ = this.scheduleListUpdate.asObservable();
@@ -83,9 +86,9 @@ export class CoursesService {
       status: status,
     };
     return this.http.post(
-      `${this.authorizeURL}schedule/${scheduleName}/${author}/`,
+      `${this.authorizeURL}schedule/${scheduleName}/${author}`,
       body,
-      { headers: headers }
+      httpOptions
     );
   }
   //Getting all schedules and number of courses in it
@@ -117,15 +120,23 @@ export class CoursesService {
     );
   }
   getCurrentSchedule(scheduleName: string) {
+    let headers = new HttpHeaders().set(
+      'Authorization',
+      localStorage.getItem('id_token')
+    );
     return this.http.get<ScheduleCourse[]>(
-      `${this.url}getSchedule/${scheduleName}`
+      `${this.authorizeURL}getSchedule/${scheduleName}`,
+
+      { headers: headers }
     );
   }
 
-  updateCourseInSchedule(scheduleName: string, courseList: ScheduleCourse[]) {
+  updateCourseInSchedule(scheduleName: string, courseList: any) {
     console.log('updating');
+    console.log(courseList);
+    this.courseList = [];
     return this.http.put(
-      `${this.url}update/${scheduleName}`,
+      `${this.authorizeURL}updateSchedule/${scheduleName}`,
       JSON.stringify(courseList),
       httpOptions
     );
@@ -140,4 +151,41 @@ export class CoursesService {
       `${this.url}getKeywordClassNum/${keyword}`
     );
   }
+  postReview(review: string, username: string, courseID: string) {
+    console.log('posting');
+    let body = [
+      {
+        review: review,
+        username: username,
+        time: getTime(),
+      },
+    ];
+    return this.http.post(
+      `${this.authorizeURL}addReview/${courseID}`,
+      body,
+      httpOptions
+    );
+  }
+  getReview(courseID: string) {
+    return this.http.get<Reviews>(
+      `${this.authorizeURL}getReview/${courseID}`,
+      httpOptions
+    );
+  }
 }
+let getTime = function () {
+  var currentDate = new Date();
+  var dateTime =
+    currentDate.getDate() +
+    '/' +
+    (currentDate.getMonth() + 1) +
+    '/' +
+    currentDate.getFullYear() +
+    ' @ ' +
+    currentDate.getHours() +
+    ':' +
+    currentDate.getMinutes() +
+    ':' +
+    currentDate.getSeconds();
+  return dateTime;
+};

@@ -22,15 +22,8 @@ export class CurrentScheduleComponent implements OnInit {
   currentSlot: TimeTableSlot;
   currentSchedules: ScheduleCourse[];
   currentCourse: ScheduleCourse;
-  ngOnInit(): void {
-    this.courseService
-      .getAllFromAuthorSchedules(localStorage.getItem('username'))
-      .subscribe((data) => {
-        console.log(data);
-        this.scheduleLists = data;
-      });
-    console.log('Hi');
-  }
+  review: string;
+  ngOnInit(): void {}
 
   selectSchedule(): void {
     this.scheduleName = this.scheduleDropdown.split(' -')[0].slice(14);
@@ -76,20 +69,46 @@ export class CurrentScheduleComponent implements OnInit {
 
     this.courseDetail.displayTimetableSlot(this.timetables);
   }
+  getTime = function () {
+    var currentDate = new Date();
+    var dateTime =
+      currentDate.getDate() +
+      '/' +
+      (currentDate.getMonth() + 1) +
+      '/' +
+      currentDate.getFullYear() +
+      ' @ ' +
+      currentDate.getHours() +
+      ':' +
+      currentDate.getMinutes() +
+      ':' +
+      currentDate.getSeconds();
+    return dateTime;
+  };
+
   updateSchedule() {
+    console.log(this.courseService.courseList);
     this.courseService
       .getCurrentSchedule(this.scheduleName)
-      .subscribe((data) => {
+      .subscribe(async (data) => {
         this.currentSchedules = data;
-        for (let currentSchedule of this.currentSchedules) {
-          this.courseService.courseList.push(currentSchedule);
+        {
+          this.currentSchedules[2].time = this.getTime();
+          for (let course of this.courseService.courseList) {
+            this.currentSchedules.push(course);
+          }
         }
+        let length = this.courseService.courseList.length;
+        console.log(length);
+        /**    for (let i = 0; i < length - 3; i++) {
+          this.courseService.courseList.push(
+            this.courseService.courseList.shift()
+          ); 
+        } **/
+
         this.courseService
-          .updateCourseInSchedule(
-            this.scheduleName,
-            this.courseService.courseList
-          )
-          .subscribe((data) => {
+          .updateCourseInSchedule(this.scheduleName, this.currentSchedules)
+          .subscribe(async (data) => {
             console.log(data);
             this.courseService.updateScheduleList();
             this.scheduleName = '';
@@ -98,4 +117,5 @@ export class CurrentScheduleComponent implements OnInit {
 
     console.log(this.courseService.courseList);
   }
+  addReview() {}
 }
