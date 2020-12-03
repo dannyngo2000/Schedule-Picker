@@ -23,6 +23,9 @@
         <li *ngIf ="!authService.isAuthenticated()"class="nav-item" [routerLinkActive] ="['active']" [routerLinkActiveOptions] = "{exact:true}">
           <a class="nav-link" [routerLink] = "['/login']">Login</a>
         </li>
+        <li *ngIf ="authService.isAdmin()"class="nav-item" [routerLinkActive] ="['active']" [routerLinkActiveOptions] = "{exact:true}">
+          <a class="nav-link" [routerLink] = "['/manage']">Manage Users</a>
+        </li>
         
         <li *ngIf ="authService.isAuthenticated()" class="nav-item">
           <a class="nav-link" (click) = "onLogoutClick()" href="#">Logout</a>

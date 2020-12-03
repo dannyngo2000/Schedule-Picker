@@ -14,16 +14,30 @@ router.post("/register", (req, res, next) => {
     username: req.body.username,
     password: req.body.password,
     activate: req.body.activate,
+    role: req.body.role,
   });
 
-  //Adding new data to the User database
-  User.addUser(newUser, (err, user) => {
-    if (err) {
-      res.json({ success: false, msg: "Fail to register" });
-    } else {
-      res.json({ success: true, msg: "Successfully register" });
+  User.findOne(
+    {
+      $or: [{ username: newUser.username }, { email: newUser.email }],
+    },
+    (err, user) => {
+      if (err) throw err;
+      if (user) {
+        console.log("what the ");
+        res.status(400).json({ success: false, msg: "You are not new" });
+      } else {
+        User.addUser(newUser, (err, user) => {
+          if (err) {
+            res.json({ success: false, msg: "Fail to register" });
+          } else {
+            res.json({ success: true, msg: "Successfully register" });
+          }
+        });
+      }
     }
-  });
+  );
+  //Adding new data to the User database
 });
 
 //Authenticate
@@ -51,6 +65,7 @@ router.post("/authenticate", (req, res, next) => {
             name: user.name,
             user: user.username,
             email: user.email,
+            role: user.role,
           },
         });
       } else {
@@ -115,5 +130,19 @@ router.post(
 router.get("/validate", (req, res, next) => {
   res.send("validate");
 });
+
+router.get(
+  "/getAllUsers",
+  passport.authenticate("jwt", { session: false }),
+  (req, res, next) => {
+    User.find({}, function (err, users) {
+      let list = [];
+      users.forEach((user) => {
+        list.push(user);
+      });
+      res.send(list);
+    });
+  }
+);
 
 module.exports = router;

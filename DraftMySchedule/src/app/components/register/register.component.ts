@@ -13,6 +13,7 @@ export class RegisterComponent implements OnInit {
   username: String;
   email: String;
   password: String;
+  role: String;
   constructor(
     private validateService: ValidateService,
     private authService: AuthService,
@@ -28,7 +29,9 @@ export class RegisterComponent implements OnInit {
       email: this.email,
       password: this.password,
       activate: true,
+      role: 'user',
     };
+    console.log(user);
     //Require Fields
     if (!this.validateService.validateRegister(user)) {
       alert('Please fill in all field');
@@ -45,15 +48,18 @@ export class RegisterComponent implements OnInit {
 
     //In order to re-direct, bring in router
     //Register
-    this.authService.registerUser(user).subscribe((data) => {
-      console.log(data);
-      if (data.success) {
-        alert('Successfully register');
-        this.router.navigate(['/login']);
-      } else {
-        alert('Failed to register');
-        this.router.navigate(['/register']);
-      }
-    });
+    this.authService.registerUser(user).subscribe(
+      (data) => {
+        console.log(data);
+        if (data.success) {
+          alert('Successfully register');
+          this.router.navigate(['/login']);
+        } else {
+          alert('Failed to register');
+          this.router.navigate(['/register']);
+        }
+      },
+      (err) => alert('You are not new !!!!!')
+    );
   }
 }

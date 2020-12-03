@@ -29,6 +29,8 @@ import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { GuestDisplayComponent } from './components/guest-display/guest-display.component';
 import { AuthorizedUserComponent } from './components/authorized-user/authorized-user.component';
 import { UserReviewComponent } from './components/user-review/user-review.component';
+import { ManageUserComponent } from './components/manage-user/manage-user.component';
+import { ClientDetailCardComponent } from './components/client-detail-card/client-detail-card.component';
 
 const appRoutes: Routes = [
   {
@@ -63,6 +65,10 @@ const appRoutes: Routes = [
     component: AuthorizedUserComponent,
     canActivate: [AuthGuard],
   },
+  {
+    path: 'manage',
+    component: ManageUserComponent,
+  },
 ];
 export function tokenGetter() {
   return localStorage.getItem('id_token');
@@ -90,6 +96,9 @@ export function tokenGetter() {
     AuthorizedUserComponent,
 
     UserReviewComponent,
+
+    ClientDetailCardComponent,
+    ManageUserComponent,
   ],
   imports: [
     BrowserModule,

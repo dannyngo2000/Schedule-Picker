@@ -1,4 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  Renderer2,
+  ElementRef,
+  ViewChild,
+} from '@angular/core';
 import { Reviews } from '../../models/Reviews';
 @Component({
   selector: 'app-user-review',

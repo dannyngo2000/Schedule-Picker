@@ -15,6 +15,7 @@ export class ProfileComponent implements OnInit {
   accountName: string;
   ngOnInit(): void {
     this.updateProfile();
+    this.accountName = localStorage.getItem('username');
   }
   updateProfile() {
     this.authService.getProfile().subscribe((profile) => {

@@ -4,4 +4,5 @@ export class User {
   password: String;
   username: string;
   activate: boolean;
+  role: String;
 }
