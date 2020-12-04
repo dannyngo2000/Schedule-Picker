@@ -12,6 +12,7 @@ import { TimeTableSlot } from '../../models/TimeTableSlot';
 import { CourseDetailCardsComponent } from '../course-detail-cards/course-detail-cards.component';
 import { CurrentScheduleComponent } from '../current-schedule/current-schedule.component';
 import { UserReviewComponent } from '../user-review/user-review.component';
+import { Reviews } from '../../models/Reviews';
 @Component({
   selector: 'app-subject-component',
   templateUrl: './subject-component.component.html',
@@ -25,6 +26,7 @@ export class SubjectComponentComponent implements OnInit {
   @ViewChild(UserReviewComponent)
   userReview: UserReviewComponent;
   review: string;
+  reviews: Reviews[];
   courseID: string;
   hideElement: true;
   subjects: Subject[];
@@ -41,6 +43,7 @@ export class SubjectComponentComponent implements OnInit {
     private element: ElementRef
   ) {}
   keyword: string;
+  token: string;
   ngOnInit(): void {
     this.courseService.getAllSubjects().subscribe((data) => {
       this.subjects = data;
@@ -56,6 +59,7 @@ export class SubjectComponentComponent implements OnInit {
         }
       });
     });
+    this.token = localStorage.getItem('id_token');
   }
   //on change event for subject code
   selectChangeHandler(event: any) {
@@ -143,10 +147,11 @@ export class SubjectComponentComponent implements OnInit {
       .subscribe((data) => alert('Added comment'));
   }
   showReview() {
-    let reviews: any = [];
     this.courseService.getReview(this.courseID).subscribe((data) => {
-      reviews = data;
-      this.userReview.displayReviews(reviews);
+      console.log(data);
+      this.reviews = data;
+      console.log(data);
+      this.userReview.displayReviews(this.reviews);
     });
   }
 }

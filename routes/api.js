@@ -460,6 +460,7 @@ router.put(
 /** @PUT set the status of a schedule to public or private */
 router.put(
   "/private/setScheduleStatus/:scheduleName",
+  passport.authenticate("jwt", { session: false }),
   async function (req, res, next) {
     let name = req.params.scheduleName;
     if (await storage.get(name)) {

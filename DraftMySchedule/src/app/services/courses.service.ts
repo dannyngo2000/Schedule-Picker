@@ -169,9 +169,8 @@ export class CoursesService {
     );
   }
   getReview(courseID: string) {
-    return this.http.get<Reviews>(
-      `${this.authorizeURL}getReview/${courseID}`,
-      httpOptions
+    return this.http.get<Reviews[]>(
+      `${this.authorizeURL}getReview/${courseID}`
     );
   }
   hideReview(review: string, courseID: string) {
@@ -183,6 +182,14 @@ export class CoursesService {
     return this.http.put(
       `${this.authorizeURL}updateReview/${courseID}`,
       body,
+      httpOptions
+    );
+  }
+
+  changeStatus(scheduleName: string) {
+    return this.http.put(
+      `${this.authorizeURL}setScheduleStatus/${scheduleName}`,
+      [],
       httpOptions
     );
   }

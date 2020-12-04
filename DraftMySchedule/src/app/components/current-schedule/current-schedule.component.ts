@@ -117,5 +117,11 @@ export class CurrentScheduleComponent implements OnInit {
 
     console.log(this.courseService.courseList);
   }
-  addReview() {}
+  changeStatus() {
+    this.courseService.changeStatus(this.scheduleName).subscribe((data) => {
+      console.log(data);
+      this.courseService.updateScheduleList();
+    });
+    this.scheduleName = '';
+  }
 }

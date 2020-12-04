@@ -10,8 +10,8 @@
     <button (click) = "updateSchedule()" [disabled]="scheduleName==='' ">Update</button>
     <button (click) ="deleteCurrentSchedule()"[disabled]="scheduleName==='' ">Delete</button>
     <button (click) = "display()"[disabled]="scheduleName==='' ">Display</button>
-    <button>Set Public</button>
-    <button>Set Private</button>
+    <button (click) ="changeStatus()" [disabled]="scheduleName==='' ">Change Status</button>
+    
 <br>
 <br>
 

@@ -23,6 +23,7 @@ export class ManageReviewComponent implements OnInit {
     let reviews: any = [];
     this.courseService.getReview(this.courseID).subscribe((data) => {
       reviews = data;
+      console.log('hello');
       this.userReview.displayReviews(reviews);
     });
   }

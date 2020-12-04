@@ -13,17 +13,22 @@ import { CoursesService } from '../../services/courses.service';
   styleUrls: ['./user-review.component.css'],
 })
 export class UserReviewComponent implements OnInit {
+  token: string;
   reviews: Reviews[];
   constructor(public courseService: CoursesService) {}
   role: string = localStorage.getItem('role');
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.token = localStorage.getItem('id_token');
+  }
   displayReviews(reviews: Reviews[]) {
+    console.log('working');
     if (this.role != 'admin') {
       reviews = reviews.filter((review) => {
         if (review.hidden == false) {
           return true;
         }
       });
+      this.reviews = reviews;
     }
 
     this.reviews = reviews;

@@ -33,8 +33,8 @@
 <input [(ngModel)] = "
 courseID" name ="courseID" placeholder ="Enter the course ID">
 <input [(ngModel)] = "review" name ="review" placeholder ="What do you think?">
-<button (click) ="addReview()">Add Review</button>
-<button (click) ="showReview()">Display Review</button>
+<button (click) ="addReview()" [disabled] ="this.token === null">Add Review</button>
+<button (click) ="showReview()" >Display Review</button>
 </div>
 <app-schedule> 
 </app-schedule>
