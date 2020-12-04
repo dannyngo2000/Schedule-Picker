@@ -47,10 +47,11 @@ export class ProfileComponent implements OnInit {
     }
   }
   deactivate() {
-    console.log(this.user.password);
-    this.accountName = this.user.name.toString();
+    this.accountName = this.user.username;
+    console.log(this.accountName);
     this.authService
       .deactivate(this.accountName)
-      .subscribe((data) => console.log(data));
+      .subscribe((data) => alert('You have been signed out'));
+    this.router.navigate(['login']);
   }
 }
