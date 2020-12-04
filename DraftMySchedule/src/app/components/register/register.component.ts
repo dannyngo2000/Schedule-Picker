@@ -29,7 +29,7 @@ export class RegisterComponent implements OnInit {
       email: this.email,
       password: this.password,
       activate: true,
-      role: 'user',
+      role: 'admin',
     };
     console.log(user);
     //Require Fields
