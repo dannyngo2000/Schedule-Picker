@@ -413,6 +413,8 @@ router.post(
   }
 );
 
+/** */
+
 /** @GET review from a course ID */
 router.get("/private/getReview/:courseID", async function (req, res, next) {
   let courseID = req.params.courseID;
@@ -454,4 +456,28 @@ router.put(
     }
   }
 );
+
+/** @PUT set the status of a schedule to public or private */
+router.put(
+  "/private/setScheduleStatus/:scheduleName",
+  async function (req, res, next) {
+    let name = req.params.scheduleName;
+    if (await storage.get(name)) {
+      let responses = await storage.get(name);
+      responses.forEach((response) => {
+        if (response.status) {
+          if (response.status == "Public") response.status = "Private";
+          else if (response.status == "Private") response.status = "Public";
+        }
+      });
+      await storage.setItem(name, responses);
+      responses = await storage.getItem(name);
+
+      res.send(responses);
+    } else {
+      res.status(404).send("The schedule name does not exist");
+    }
+  }
+);
+
 module.exports = router;

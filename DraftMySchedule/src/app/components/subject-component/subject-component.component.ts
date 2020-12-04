@@ -104,29 +104,38 @@ export class SubjectComponentComponent implements OnInit {
       });
   }
   searchByClassName() {
-    this.courseService.getByClassNameKeyword(this.keyword).subscribe(
-      (data) => {
-        if (data.length == 0) alert('There is no matching');
-        else {
+    if (this.keyword.length < 4) {
+      alert('The keyword has to be longer than 4 characters');
+    } else {
+      this.courseService.getByClassNameKeyword(this.keyword).subscribe(
+        (data) => {
+          if (data.length == 0) alert('There is no matching');
+          else {
+            this.timetableSlot = data;
+            this.currentSchedule.courseDetail.displayTimetableSlot(
+              this.timetableSlot
+            );
+          }
+        },
+        (err) => alert('The keyword does not match')
+      );
+    }
+  }
+  searchByCourseCode() {
+    console.log(this.keyword);
+    if (this.keyword.length < 4) {
+      alert('The keyword has to be longer than 4 characters');
+    } else {
+      this.courseService.getByClassNumKeyword(this.keyword).subscribe(
+        (data) => {
           this.timetableSlot = data;
           this.currentSchedule.courseDetail.displayTimetableSlot(
             this.timetableSlot
           );
-        }
-      },
-      (err) => alert('The keyword does not match')
-    );
-  }
-  searchByCourseCode() {
-    this.courseService.getByClassNumKeyword(this.keyword).subscribe(
-      (data) => {
-        this.timetableSlot = data;
-        this.currentSchedule.courseDetail.displayTimetableSlot(
-          this.timetableSlot
-        );
-      },
-      (err) => alert('The keyword does not match')
-    );
+        },
+        (err) => alert('The keyword does not match')
+      );
+    }
   }
   addReview() {
     this.courseService
