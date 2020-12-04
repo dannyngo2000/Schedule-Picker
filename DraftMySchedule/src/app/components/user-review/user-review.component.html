@@ -5,7 +5,8 @@
         <mat-card-content>Name : {{review.username}}</mat-card-content>
         <mat-card-content>Date : {{review.time}}</mat-card-content>
         <mat-card-content >Description : {{review.review}}</mat-card-content>
-        <button (click) ="hide()" [disabled] ="role ==='user'">Flag</button>
+        <mat-card-content>Hidden: {{review.hidden}}</mat-card-content>
+        <button (click) ="hide(review.review, review.courseID)" [disabled] ="role ==='user'">Flag</button>
     </mat-card>
     
     </div>

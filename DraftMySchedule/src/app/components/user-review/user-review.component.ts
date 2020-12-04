@@ -6,6 +6,7 @@ import {
   ViewChild,
 } from '@angular/core';
 import { Reviews } from '../../models/Reviews';
+import { CoursesService } from '../../services/courses.service';
 @Component({
   selector: 'app-user-review',
   templateUrl: './user-review.component.html',
@@ -13,19 +14,24 @@ import { Reviews } from '../../models/Reviews';
 })
 export class UserReviewComponent implements OnInit {
   reviews: Reviews[];
-  constructor() {}
+  constructor(public courseService: CoursesService) {}
   role: string = localStorage.getItem('role');
   ngOnInit(): void {}
   displayReviews(reviews: Reviews[]) {
-    reviews = reviews.filter((review) => {
-      if (review.hidden == false) {
-        return true;
-      }
-    });
+    if (this.role != 'admin') {
+      reviews = reviews.filter((review) => {
+        if (review.hidden == false) {
+          return true;
+        }
+      });
+    }
 
     this.reviews = reviews;
   }
-  hide() {
-    console.log('nope');
+  hide(review: string, courseID: string) {
+    this.courseService.hideReview(review, courseID).subscribe(
+      (data) => alert('Flagged'),
+      (err) => alert('Something went wrong')
+    );
   }
 }

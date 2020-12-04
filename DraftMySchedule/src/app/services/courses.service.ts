@@ -159,6 +159,7 @@ export class CoursesService {
         username: username,
         time: getTime(),
         hidden: false,
+        courseID: courseID,
       },
     ];
     return this.http.post(
@@ -170,6 +171,18 @@ export class CoursesService {
   getReview(courseID: string) {
     return this.http.get<Reviews>(
       `${this.authorizeURL}getReview/${courseID}`,
+      httpOptions
+    );
+  }
+  hideReview(review: string, courseID: string) {
+    let body = [
+      {
+        description: review,
+      },
+    ];
+    return this.http.put(
+      `${this.authorizeURL}updateReview/${courseID}`,
+      body,
       httpOptions
     );
   }

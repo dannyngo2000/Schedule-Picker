@@ -384,6 +384,7 @@ router.put("/private/updateSchedule/:scheduleName", async function (req, res) {
     console.log(err);
   }
 });
+/** @POST review to a given courseID */
 router.post(
   "/private/addReview/:courseID",
   passport.authenticate("jwt", { session: false }),
@@ -411,13 +412,46 @@ router.post(
     }
   }
 );
+
+/** @GET review from a course ID */
 router.get("/private/getReview/:courseID", async function (req, res, next) {
   let courseID = req.params.courseID;
   if ((await myStorage.getItem(courseID)) === undefined) {
     res.status(400).send("There is currently no reviews yet");
   } else if (await myStorage.getItem(courseID)) {
     let result = await myStorage.getItem(courseID);
+
     res.status(200).send(result);
   }
 });
+/** @PUT set status of review to a given courseID */
+router.put(
+  "/private/updateReview/:courseID",
+  passport.authenticate("jwt", { session: false }),
+  async function (req, res, next) {
+    let courseID = req.params.courseID;
+    let reviews = req.body;
+    let contain = false;
+    console.log();
+    timetables.forEach((timetable) => {
+      if (timetable.course_info[0].class_nbr == courseID) {
+        contain = true;
+      }
+    });
+    if (contain) {
+      let responses = await myStorage.getItem(courseID);
+
+      responses.forEach((response) => {
+        if (response.review === reviews[0].description) {
+          response.hidden = true;
+        }
+        console.log(response);
+      });
+      let b = await myStorage.setItem(courseID, responses);
+      res.send(responses);
+    } else {
+      res.status(400).send("error");
+    }
+  }
+);
 module.exports = router;
