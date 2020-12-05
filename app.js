@@ -11,10 +11,9 @@ const users = require("./routes/users");
 const api = require("./routes/api");
 let similarity = require("string-similarity");
 //Connecting to database
-let uri =
-  "mongodb+srv://dannyngo:dannyngo@draftmyschedule.lscb9.mongodb.net/DraftMySchedule?retryWrites=true&w=majority";
+
 const db = mongoose
-  .connect(uri, {
+  .connect(config.database, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
     useFindAndModify: false,

@@ -1,4 +1,5 @@
 module.exports = {
-  database: "mongodb://localhost:27017/draftmyschedule",
+  database:
+    "mongodb+srv://dannyngo:dannyngo@draftmyschedule.lscb9.mongodb.net/DraftMySchedule?retryWrites=true&w=majority",
   secret: "SE3316",
 };
