@@ -21,10 +21,13 @@ export class ManageReviewComponent implements OnInit {
   ngOnInit(): void {}
   displayReview() {
     let reviews: any = [];
-    this.courseService.getReview(this.courseID).subscribe((data) => {
-      reviews = data;
-      console.log('hello');
-      this.userReview.displayReviews(reviews);
-    });
+    this.courseService.getReview(this.courseID).subscribe(
+      (data) => {
+        reviews = data;
+        console.log('hello');
+        this.userReview.displayReviews(reviews);
+      },
+      (err) => alert('This course number does not exist')
+    );
   }
 }
