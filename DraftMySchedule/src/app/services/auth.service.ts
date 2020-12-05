@@ -8,7 +8,7 @@ import { JwtHelperService } from '@auth0/angular-jwt';
 import { ThrowStmt } from '@angular/compiler';
 import { Clients } from '../models/Client';
 
-const httpOptions = {
+let httpOptions = {
   headers: new HttpHeaders({
     'Content-Type': 'application/json',
     Authorization: localStorage.getItem('id_token'),
@@ -131,7 +131,13 @@ export class AuthService {
       httpOptions
     );
   }
-  getAllUsers(): Observable<Clients[]> {
+  getAllUsers(token: string): Observable<Clients[]> {
+    let httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        Authorization: token,
+      }),
+    };
     return this.http.get<Clients[]>(
       'http://localhost:3000/users/getAllUsers',
       httpOptions

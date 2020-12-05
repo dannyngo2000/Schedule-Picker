@@ -17,10 +17,13 @@ export class ManageUserComponent implements OnInit {
   @ViewChild(ClientDetailCardComponent)
   clientDetail: ClientDetailCardComponent;
   constructor(public authService: AuthService) {}
+  token: string;
   clients: Clients[];
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.token = localStorage.getItem('id_token');
+  }
   displayUsers() {
-    this.authService.getAllUsers().subscribe((data) => {
+    this.authService.getAllUsers(this.token).subscribe((data) => {
       this.clients = data;
       this.clientDetail.displayDetail(this.clients);
     });

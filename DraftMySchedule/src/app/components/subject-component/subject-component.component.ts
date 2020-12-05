@@ -142,16 +142,33 @@ export class SubjectComponentComponent implements OnInit {
     }
   }
   addReview() {
-    this.courseService
-      .postReview(this.review, localStorage.getItem('username'), this.courseID)
-      .subscribe((data) => alert('Added comment'));
+    if (this.review == null) {
+      alert('Please enter something');
+    } else {
+      this.courseService
+        .postReview(
+          this.review,
+          localStorage.getItem('username'),
+          localStorage.getItem('id_token'),
+          this.courseID
+        )
+        .subscribe(
+          (data) => alert('Added comment'),
+          (err) => alert('This course does not exist')
+        );
+    }
+    this.review = '';
+    this.courseID = '';
   }
   showReview() {
-    this.courseService.getReview(this.courseID).subscribe((data) => {
-      console.log(data);
-      this.reviews = data;
-      console.log(data);
-      this.userReview.displayReviews(this.reviews);
-    });
+    this.courseService.getReview(this.courseID).subscribe(
+      (data) => {
+        console.log(data);
+        this.reviews = data;
+        console.log(data);
+        this.userReview.displayReviews(this.reviews);
+      },
+      (err) => alert("This course doesnt exist or don't have any comment yet")
+    );
   }
 }

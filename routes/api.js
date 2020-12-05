@@ -280,6 +280,31 @@ router.get("/private/getAuthorSchedule/:authorName", async (req, res, next) => {
     console.log(err);
   }
 });
+
+/**@GET GET all list of schedules from all authors */
+router.get("/open/getAllSchedules", async (req, res, next) => {
+  let keys = await storage.keys();
+  try {
+    responses = keys.map(async (key) => {
+      let currentItem = await storage.get(key);
+      return {
+        scheduleName: key,
+        author: currentItem[0].author,
+        status: currentItem[1].status,
+        time: currentItem[2].time,
+        length: (currentItem.length - 3).toString(),
+      };
+    });
+
+    Promise.all(responses).then((response) => {
+      console.log(response);
+      res.status(200).send(response);
+    });
+  } catch (err) {
+    console.log(err);
+  }
+});
+
 //@GET GET list of subject and course codes from a given schedule of an author
 router.get(
   "/private/getSchedule/:scheduleName",
@@ -305,6 +330,26 @@ router.get(
     }
   }
 );
+router.get("/open/getSchedule/:scheduleName", async (req, res, next) => {
+  var scheduleNamed = req.params.scheduleName;
+
+  scheduleNamed = sanitizeHTML(scheduleNamed, {
+    allowedTags: [],
+    allowedAttributes: [],
+  });
+  try {
+    const existing = await storage.get(scheduleNamed);
+    if (existing) {
+      //var list = await storage.get(scheduleNamed);
+
+      res.status(200).send(existing);
+    } else {
+      res.status(404).send(`The schedule ${scheduleNamed} is not existed`);
+    }
+  } catch (err) {
+    console.log(err);
+  }
+});
 let getTime = function () {
   var currentDate = new Date();
   var dateTime =

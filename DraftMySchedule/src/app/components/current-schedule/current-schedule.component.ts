@@ -23,7 +23,10 @@ export class CurrentScheduleComponent implements OnInit {
   currentSchedules: ScheduleCourse[];
   currentCourse: ScheduleCourse;
   review: string;
-  ngOnInit(): void {}
+  token: string;
+  ngOnInit(): void {
+    this.token = localStorage.getItem('id_token');
+  }
 
   selectSchedule(): void {
     this.scheduleName = this.scheduleDropdown.split(' -')[0].slice(14);
@@ -49,23 +52,47 @@ export class CurrentScheduleComponent implements OnInit {
 
   display() {
     this.timetables = [];
-    this.courseService
-      .getCurrentSchedule(this.scheduleName)
-      .subscribe((data) => {
-        this.scheduleCourses = data;
-        for (let scheduleCourse of this.scheduleCourses) {
-          this.courseService
-            .getTimetableSlot(
-              scheduleCourse.subject_code,
-              scheduleCourse.course_code,
-              'ALL'
-            )
-            .subscribe((data) => {
-              this.currentSlot = data[0];
-              this.timetables.push(this.currentSlot);
-            });
-        }
-      });
+    if (localStorage.getItem('username'))
+      this.courseService
+        .getCurrentSchedule(this.scheduleName)
+        .subscribe((data) => {
+          this.scheduleCourses = data;
+
+          for (let scheduleCourse of this.scheduleCourses) {
+            if (!scheduleCourse.subject_code) continue;
+
+            this.courseService
+              .getTimetableSlot(
+                scheduleCourse.subject_code,
+                scheduleCourse.course_code,
+                'ALL'
+              )
+              .subscribe((data) => {
+                this.currentSlot = data[0];
+                this.timetables.push(this.currentSlot);
+              });
+          }
+        });
+    else {
+      this.courseService
+        .getUnauthorizedCurrentSchedule(this.scheduleName)
+        .subscribe((data) => {
+          this.scheduleCourses = data;
+          for (let scheduleCourse of this.scheduleCourses) {
+            if (!scheduleCourse.subject_code) continue;
+            this.courseService
+              .getTimetableSlot(
+                scheduleCourse.subject_code,
+                scheduleCourse.course_code,
+                'ALL'
+              )
+              .subscribe((data) => {
+                this.currentSlot = data[0];
+                this.timetables.push(this.currentSlot);
+              });
+          }
+        });
+    }
 
     this.courseDetail.displayTimetableSlot(this.timetables);
   }

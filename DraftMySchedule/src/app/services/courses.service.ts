@@ -9,7 +9,7 @@ import { ScheduleCourse } from '../models/ScheduleCourse';
 import { Reviews } from '../models/Reviews';
 import { map, switchMap } from 'rxjs/operators';
 
-const httpOptions = {
+let httpOptions = {
   headers: new HttpHeaders({
     'Content-Type': 'application/json',
     Authorization: localStorage.getItem('id_token'),
@@ -23,39 +23,73 @@ export class CoursesService {
   courseList: any = [];
   counter: number = 0;
   count: number = 0;
+  token: string = localStorage.getItem('id_token');
   private scheduleListUpdate = new BehaviorSubject('');
   schedule$ = this.scheduleListUpdate.asObservable();
   scheduleUpdateStream$ = this.schedule$.pipe(
     map((res) => res),
     switchMap((res) => {
-      return this.http
-        .get<ScheduleList[]>(
-          `${this.authorizeURL}getAuthorSchedule/${localStorage.getItem(
-            'username'
-          )}`
-        )
-        .pipe(
+      if (localStorage.getItem('username'))
+        return this.http
+          .get<ScheduleList[]>(
+            `${this.authorizeURL}getAuthorSchedule/${localStorage.getItem(
+              'username'
+            )}`
+          )
+          .pipe(
+            map((res) => {
+              let mapped: string[] = [];
+              res.forEach((val) => {
+                return mapped.push(
+                  'Schedule Name:' +
+                    val.scheduleName +
+                    ' - ' +
+                    'Items: ' +
+                    val.length +
+                    ' - ' +
+                    'Status: ' +
+                    val.status +
+                    ' - ' +
+                    'Time: ' +
+                    val.time
+                );
+              });
+
+              return mapped;
+            })
+          );
+      else {
+        return this.http.get<ScheduleList[]>(`${this.url}getAllSchedules`).pipe(
           map((res) => {
             let mapped: string[] = [];
+            let count = 0;
             res.forEach((val) => {
-              return mapped.push(
-                'Schedule Name:' +
-                  val.scheduleName +
-                  ' - ' +
-                  'Items: ' +
-                  val.length +
-                  ' - ' +
-                  'Status: ' +
-                  val.status +
-                  ' - ' +
-                  'Time: ' +
-                  val.time
-              );
+              console.log(val);
+              if (val.status === 'Public' && count < 10) {
+                count++;
+                return mapped.push(
+                  'Schedule Name:' +
+                    val.scheduleName +
+                    ' - ' +
+                    'Items: ' +
+                    val.length +
+                    ' - ' +
+                    'Status: ' +
+                    val.status +
+                    ' - ' +
+                    'Time: ' +
+                    val.time +
+                    ' - ' +
+                    'Author: ' +
+                    val.author
+                );
+              }
             });
-
+            console.log(mapped);
             return mapped;
           })
         );
+      }
     })
   );
 
@@ -130,6 +164,11 @@ export class CoursesService {
       { headers: headers }
     );
   }
+  getUnauthorizedCurrentSchedule(scheduleName: string) {
+    return this.http.get<ScheduleCourse[]>(
+      `${this.url}getSchedule/${scheduleName}`
+    );
+  }
 
   updateCourseInSchedule(scheduleName: string, courseList: any) {
     console.log('updating');
@@ -151,7 +190,12 @@ export class CoursesService {
       `${this.url}getKeywordClassNum/${keyword}`
     );
   }
-  postReview(review: string, username: string, courseID: string) {
+  postReview(
+    review: string,
+    username: string,
+    token: string,
+    courseID: string
+  ) {
     console.log('posting');
     let body = [
       {
@@ -162,6 +206,12 @@ export class CoursesService {
         courseID: courseID,
       },
     ];
+    let httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        Authorization: token,
+      }),
+    };
     return this.http.post(
       `${this.authorizeURL}addReview/${courseID}`,
       body,

@@ -7,10 +7,10 @@
     
 </div>
     <button (click) ="selectSchedule()">Select</button>
-    <button (click) = "updateSchedule()" [disabled]="scheduleName==='' ">Update</button>
-    <button (click) ="deleteCurrentSchedule()"[disabled]="scheduleName==='' ">Delete</button>
+    <button (click) = "updateSchedule()" [disabled]="scheduleName==='' || this.token == null">Update</button>
+    <button (click) ="deleteCurrentSchedule()"[disabled]="scheduleName==='' || this.token == null ">Delete</button>
     <button (click) = "display()"[disabled]="scheduleName==='' ">Display</button>
-    <button (click) ="changeStatus()" [disabled]="scheduleName==='' ">Change Status</button>
+    <button (click) ="changeStatus()" [disabled]="scheduleName==='' || this.token == null">Change Status</button>
     
 <br>
 <br>
